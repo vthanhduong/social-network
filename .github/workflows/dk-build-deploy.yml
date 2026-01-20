@@ -34,6 +34,8 @@ jobs:
           build-args: |
             NEXT_PUBLIC_STREAM_KEY=${{ secrets.NEXT_PUBLIC_STREAM_KEY }}
             NEXT_PUBLIC_BASE_URL=${{ secrets.NEXT_PUBLIC_BASE_URL }}
+            POSTGRES_URL_NON_POOLING=${{ secrets.POSTGRES_URL_NON_POOLING }}
+            POSTGRES_PRISMA_URL=${{ secrets.POSTGRES_PRISMA_URL }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
