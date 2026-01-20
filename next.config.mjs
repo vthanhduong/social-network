@@ -5,6 +5,14 @@ const nextConfig = {
       dynamic: 30,
     },
   },
+  turbopack: {
+    rules: {
+      "*.md": {
+        loaders: ["raw-loader"],
+        as: "*.js",
+      },
+    },
+  },
   serverExternalPackages: ["@node-rs/argon2"],
   images: {
     remotePatterns: [
