@@ -10,7 +10,7 @@ COPY package*.json ./
 RUN echo "NEXT_PUBLIC_STREAM_KEY=$NEXT_PUBLIC_STREAM_KEY" >> .env && \
   echo "NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL" >> .env
 
-RUN npm install
+RUN npm install --force
 COPY . .
 RUN npm run build
 
