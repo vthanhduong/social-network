@@ -32,7 +32,6 @@ jobs:
           push: true
           tags: ghcr.io/${{ github.repository }}:latest
             NEXT_PUBLIC_STREAM_KEY=${{ secrets.NEXT_PUBLIC_STREAM_KEY }}
-            NEXT_PUBLIC_BASE_URL=${{ secrets.NEXT_PUBLIC_BASE_URL }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
