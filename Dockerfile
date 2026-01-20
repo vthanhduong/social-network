@@ -1,8 +1,15 @@
 # Stage 1: Build
 FROM node:22-alpine AS builder
+
+ARG NEXT_PUBLIC_STREAM_KEY
+ARG NEXT_PUBLIC_BASE_URL
+
 WORKDIR /app
 
 RUN apk add --no-cache libc6-compat
+
+RUN echo "NEXT_PUBLIC_STREAM_KEY=$NEXT_PUBLIC_STREAM_KEY" >> .env && \
+  echo "NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL" >> .env
 
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 RUN \
