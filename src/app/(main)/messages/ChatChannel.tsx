@@ -38,7 +38,7 @@ function CustomChannelHeader({
   ...props
 }: CustomChannelHeaderProps) {
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-3 max-w-0">
       <div className="h-full p-2 md:hidden">
         <Button size="icon" variant="ghost" onClick={openSidebar}>
           <Menu className="size-5" />
