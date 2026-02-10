@@ -2,19 +2,23 @@ import { Toaster } from "@/components/ui/toaster";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
-import localFont from "next/font/local";
+import { Montserrat } from "next/font/google";
+import { Geo } from "next/font/google";
 import { extractRouterConfig } from "uploadthing/server";
 import { fileRouter } from "./api/uploadthing/core";
 import "./globals.css";
 import ReactQueryProvider from "./ReactQueryProvider";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-montserrat",
 });
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
+
+const geo = Geo({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-geo",
 });
 
 export const metadata: Metadata = {
@@ -31,8 +35,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${montserrat.variable} ${geo.variable}`}>
         <NextSSRPlugin routerConfig={extractRouterConfig(fileRouter)} />
         <ReactQueryProvider>
           <ThemeProvider
