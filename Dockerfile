@@ -14,7 +14,7 @@ RUN echo "NEXT_PUBLIC_STREAM_KEY=${NEXT_PUBLIC_STREAM_KEY}" >> .env && \
   echo "POSTGRES_URL_NON_POOLING=${POSTGRES_URL_NON_POOLING}" >> .env && \
   echo "POSTGRES_PRISMA_URL=${POSTGRES_PRISMA_URL}" >> .env
 
-RUN npm install --force
+RUN npm install --legacy-peer-deps
 COPY . .
 RUN npm run build
 
@@ -24,7 +24,6 @@ WORKDIR /app
 
 ENV NODE_ENV production
 
-# Chỉ copy những thứ thực sự cần thiết từ stage builder
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
