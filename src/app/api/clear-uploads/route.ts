@@ -1,5 +1,6 @@
+import minioClient, { MINIO_BUCKET, MINIO_PUBLIC_URL } from "@/lib/minio";
 import prisma from "@/lib/prisma";
-import { UTApi } from "uploadthing/server";
+import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 
 export async function GET(req: Request) {
   try {
@@ -29,11 +30,17 @@ export async function GET(req: Request) {
       },
     });
 
-    new UTApi().deleteFiles(
-      unusedMedia.map(
-        (m) =>
-          m.url.split(`/a/${process.env.UPLOADTHING_APP_ID}/`)[1],
-      ),
+    // Delete files from MinIO
+    await Promise.all(
+      unusedMedia.map((m) => {
+        const key = m.url.split(`${MINIO_BUCKET}/`)[1];
+        return minioClient.send(
+          new DeleteObjectCommand({
+            Bucket: MINIO_BUCKET,
+            Key: key,
+          }),
+        );
+      }),
     );
 
     await prisma.media.deleteMany({

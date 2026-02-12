@@ -8,9 +8,12 @@
     "build": "next build",
     "start": "node .next/standalone/server.js",
     "lint": "next lint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "setup-minio": "node scripts/setup-minio.mjs"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.988.0",
+    "@aws-sdk/s3-request-presigner": "^3.988.0",
     "@hookform/resolvers": "^3.9.0",
     "@lucia-auth/adapter-prisma": "^4.0.1",
     "@prisma/client": "^7.3.0-dev.15",
@@ -29,7 +32,6 @@
     "@tiptap/pm": "^3.18.0",
     "@tiptap/react": "^2.4.0",
     "@tiptap/starter-kit": "^2.4.0",
-    "@uploadthing/react": "^7.3.3",
     "arctic": "^1.9.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -51,13 +53,13 @@
     "stream-chat-react": "^11.24.1",
     "tailwind-merge": "^3.4.0",
     "tailwindcss-animate": "^1.0.7",
-    "uploadthing": "^7.7.4",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "dotenv": "^17.2.4",
     "eslint": "^8",
     "eslint-config-next": "^15.5.9",
     "eslint-config-prettier": "^9.1.0",
