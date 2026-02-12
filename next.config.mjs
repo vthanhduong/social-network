@@ -19,7 +19,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'utfs.io',
+        hostname: 's3.lucisvu.com',
         port: '',
         pathname: '/**',
       },

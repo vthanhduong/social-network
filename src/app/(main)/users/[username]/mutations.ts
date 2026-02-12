@@ -1,6 +1,5 @@
 import { useToast } from "@/components/ui/use-toast";
 import { PostsPage } from "@/lib/types";
-import { useUploadThing } from "@/lib/uploadthing";
 import { UpdateUserProfileValues } from "@/lib/validation";
 import {
   InfiniteData,
@@ -18,8 +17,6 @@ export function useUpdateProfileMutation() {
 
   const queryClient = useQueryClient();
 
-  const { startUpload: startAvatarUpload } = useUploadThing("avatar");
-
   const mutation = useMutation({
     mutationFn: async ({
       values,
@@ -28,13 +25,29 @@ export function useUpdateProfileMutation() {
       values: UpdateUserProfileValues;
       avatar?: File;
     }) => {
-      return Promise.all([
-        updateUserProfile(values),
-        avatar && startAvatarUpload([avatar]),
-      ]);
+      const uploadAvatarPromise = avatar
+        ? (async () => {
+            const formData = new FormData();
+            formData.append("file", avatar);
+
+            const response = await fetch("/api/upload/avatar", {
+              method: "POST",
+              body: formData,
+            });
+
+            if (!response.ok) {
+              const error = await response.json();
+              throw new Error(error.error || "Avatar upload failed");
+            }
+
+            return response.json();
+          })()
+        : Promise.resolve(null);
+
+      return Promise.all([updateUserProfile(values), uploadAvatarPromise]);
     },
     onSuccess: async ([updatedUser, uploadResult]) => {
-      const newAvatarUrl = uploadResult?.[0].serverData.avatarUrl;
+      const newAvatarUrl = uploadResult?.avatarUrl;
 
       const queryFilter: QueryFilters = {
         queryKey: ["post-feed"],

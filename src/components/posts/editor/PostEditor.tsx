@@ -8,10 +8,9 @@ import { cn } from "@/lib/utils";
 import Placeholder from "@tiptap/extension-placeholder";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { useDropzone } from "@uploadthing/react";
 import { ImageIcon, Loader2, X } from "lucide-react";
 import Image from "next/image";
-import { ClipboardEvent, useRef } from "react";
+import { ClipboardEvent, useRef, useState } from "react";
 import { useSubmitPostMutation } from "./mutations";
 import "./styles.css";
 import useMediaUpload, { Attachment } from "./useMediaUpload";
@@ -30,11 +29,31 @@ export default function PostEditor() {
     reset: resetMediaUploads,
   } = useMediaUpload();
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop: startUpload,
-  });
+  const [isDragActive, setIsDragActive] = useState(false);
 
-  const { onClick, ...rootProps } = getRootProps();
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragActive(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragActive(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragActive(false);
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length > 0) {
+      startUpload(files);
+    }
+  };
+
+  const rootProps = {
+    onDragOver: handleDragOver,
+    onDragLeave: handleDragLeave,
+    onDrop: handleDrop,
+  };
 
   const editor = useEditor({
     extensions: [
@@ -88,7 +107,6 @@ export default function PostEditor() {
             )}
             onPaste={onPaste}
           />
-          <input {...getInputProps()} />
         </div>
       </div>
       {!!attachments.length && (
