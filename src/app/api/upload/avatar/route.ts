@@ -16,6 +16,12 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData();
     const file = formData.get("file") as File;
 
+    console.log("[Avatar Upload] File received:", {
+      name: file?.name,
+      size: file?.size,
+      type: file?.type,
+    });
+
     if (!file) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
@@ -57,6 +63,12 @@ export async function POST(req: NextRequest) {
     const extension = file.name.split(".").pop();
     const filename = `avatars/${user.id}_${Date.now()}.${extension}`;
 
+    console.log("[Avatar Upload] Uploading to MinIO:", {
+      bucket: MINIO_BUCKET,
+      filename,
+      endpoint: process.env.MINIO_ENDPOINT,
+    });
+
     // Convert file to buffer
     const buffer = Buffer.from(await file.arrayBuffer());
 
@@ -70,8 +82,11 @@ export async function POST(req: NextRequest) {
       }),
     );
 
+    console.log("[Avatar Upload] Upload successful");
+
     // Update user avatar in database and Stream
     const newAvatarUrl = `${MINIO_PUBLIC_URL}/${MINIO_BUCKET}/${filename}`;
+    console.log("[Avatar Upload] New avatar URL:", newAvatarUrl);
     await Promise.all([
       prisma.user.update({
         where: { id: user.id },

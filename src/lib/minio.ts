@@ -1,5 +1,13 @@
 import { S3Client } from "@aws-sdk/client-s3";
 
+// Log configuration for debugging
+console.log("[MinIO Config]", {
+  endpoint: process.env.MINIO_ENDPOINT,
+  bucket: process.env.MINIO_BUCKET,
+  hasAccessKey: !!process.env.MINIO_ACCESS_KEY,
+  hasSecretKey: !!process.env.MINIO_SECRET_KEY,
+});
+
 const minioClient = new S3Client({
   endpoint: `https://${process.env.MINIO_ENDPOINT}`,
   region: "us-east-1", // MinIO doesn't care about region
